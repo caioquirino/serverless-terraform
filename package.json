@@ -1,0 +1,23 @@
+{
+  "name": "serverless-terraform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caioquirino/serverless-terraform.git"
+  },
+  "author": "Caio Quirino",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/caioquirino/serverless-terraform/issues"
+  },
+  "homepage": "https://github.com/caioquirino/serverless-terraform#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
