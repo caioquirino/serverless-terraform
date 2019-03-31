@@ -24,6 +24,11 @@ app.get('/version', (req, res) => res.json({
   version: "1.0.0"
 }))
 
+app.get('/users/1', (req, res) => res.json({
+  name: "Caio Quirino",
+  email: "example@test.com",
+}))
+
 app.get('/health', (req, res) => res.sendStatus(200))
 
 

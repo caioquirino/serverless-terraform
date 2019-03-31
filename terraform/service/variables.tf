@@ -3,6 +3,9 @@
 variable "key" {
   description = "Terraform State S3 Backend location."
 }
+variable "account" {
+  description = "AWS Account ID"
+}
 variable "profile" {
   description = "AWS Profile in use. (preprod/prod)"
 }
