@@ -65,6 +65,9 @@ typings/
 
 # Terraform
 terraform/service/.terraform
+terraform/service/plan.out
+terraform/dns/.terraform
+terraform/dns/plan.out
 
 #Deployment
 serverless-terraform.zip

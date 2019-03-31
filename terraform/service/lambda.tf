@@ -35,7 +35,6 @@ resource "aws_lambda_function" "test_lambda" {
   s3_bucket        = "${var.lambda_deploy_bucket}"
   s3_key           = "lambda/${var.environment}/serverless-terraform.zip"
   s3_object_version = "${aws_s3_bucket_object.deployment.version_id}"
-  //filename       = "../../serverless-terraform.zip"
   function_name    = "serverless_demo_function_${var.environment}"
   role             = "${aws_iam_role.lambda_role.arn}"
   handler          = "src/index.main"
@@ -49,6 +48,7 @@ resource "aws_lambda_function" "test_lambda" {
   environment {
     variables = {
       LOG_LEVEL = "info"
+      ENVIRONMENT = "${var.environment}"
     }
   }
 }

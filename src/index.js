@@ -21,7 +21,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/version', (req, res) => res.json({
-  version: "1.0.0"
+  version: "1.0.0",
+  region: process.env.AWS_REGION || "local",
+  environment: process.env.ENVIRONMENT || "local"
 }))
 
 app.get('/users/1', (req, res) => res.json({
