@@ -65,3 +65,6 @@ typings/
 
 # Terraform
 terraform/service/.terraform
+
+#Deployment
+serverless-terraform.zip
