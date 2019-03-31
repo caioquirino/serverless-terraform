@@ -1,5 +1,7 @@
-region         = "us-east-1" # All the remote state lives in us-east-1 s3 bucket, distinguished by the region part in the key
-bucket         = "779725955043-tfstate"
-key            = "services/serverless-terraform/dev/us-east-1/serverless-terraform-service.tfstate"
-dynamodb_table = "779725955043-tfstate-lock"
-profile        = "779725955043"
+region               = "us-east-1" # All the remote state lives in us-east-1 s3 bucket, distinguished by the region part in the key
+bucket               = "779725955043-tfstate"
+lambda_deploy_bucket = "779725955043-lambda-deployment"
+environment          = "dev"
+key                  = "services/serverless-terraform/dev/us-east-1/serverless-terraform-service.tfstate"
+dynamodb_table       = "779725955043-tfstate-lock"
+profile              = "779725955043"

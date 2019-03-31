@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 cd `dirname "$(realpath $0)"`/..
+npm install
 rm -rf serverless-terraform.zip
-
 zip -rv serverless-terraform.zip src/* node_modules
 
 cd terraform/service

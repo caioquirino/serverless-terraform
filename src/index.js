@@ -1,7 +1,6 @@
 const express = require('express')
 const bunyan = require('bunyan');
 
-const port = process.env.PORT || 3000
 const logLevel = process.env.LOG_LEVEL || 'debug'
 
 
@@ -10,6 +9,8 @@ const log = bunyan.createLogger({
   stream: process.stdout,
   level: logLevel
 })
+
+log.info("Application starting...")
 
 const app = express()
 
@@ -35,6 +36,7 @@ if (isInLambda) {
   exports.main = (event, context) => serverlessExpress.proxy(server, event, context)
   log.info("Lambda function started")
 } else {
+  const port = process.env.PORT || 3000
   app.listen(port, () => log.info(`Example app listening on port ${port}`))
   exports = app
 }

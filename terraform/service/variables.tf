@@ -9,3 +9,10 @@ variable "profile" {
 variable "region" {
   description = "AWS region in use."
 }
+variable "lambda_deploy_bucket" {
+  description = "Lambda zip deployment file bucket name"
+}
+
+variable "environment" {
+  description = "Environment - dev, prod..."
+}
