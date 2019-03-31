@@ -1,8 +1,23 @@
 const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
+const bunyan = require('bunyan');
 
-app.get('/', (req, res) => res.send('Hello World!'))
+const port = process.env.PORT || 3000
+const logLevel = process.env.LOG_LEVEL || 'debug'
+
+
+const log = bunyan.createLogger({
+  name: "serverless-terraform",
+  stream: process.stdout,
+  level: logLevel
+})
+
+const app = express()
+
+
+app.get('/', (req, res) => {
+  log.info(`request received in route "/"`)
+  res.send('Hello World!')
+})
 
 app.get('/version', (req, res) => res.json({
   version: "1.0.0"
@@ -18,8 +33,8 @@ if (isInLambda) {
   const serverlessExpress = require('aws-serverless-express');
   const server = serverlessExpress.createServer(app);
   exports.main = (event, context) => serverlessExpress.proxy(server, event, context)
+  log.info("Lambda function started")
 } else {
-  app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+  app.listen(port, () => log.info(`Example app listening on port ${port}`))
   exports = app
 }
-
