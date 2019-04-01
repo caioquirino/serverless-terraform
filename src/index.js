@@ -1,14 +1,23 @@
 const express = require('express')
-const bunyan = require('bunyan');
+const bunyan = require('bunyan')
+const UserRepo = require('./userRepo')
+const env = process.env.ENVIRONMENT || "dev"
+const region = process.env.AWS_REGION || "us-east-1"
 
 const logLevel = process.env.LOG_LEVEL || 'debug'
-
-
 const log = bunyan.createLogger({
   name: "serverless-terraform",
   stream: process.stdout,
   level: logLevel
 })
+
+const AWS = require("aws-sdk");
+AWS.config.update({
+  region
+});
+const documentClient = new AWS.DynamoDB.DocumentClient();
+
+const userRepo = new UserRepo(log, documentClient, `${env}_users`);
 
 log.info("Application starting...")
 
@@ -22,9 +31,11 @@ app.get('/', (req, res) => {
 
 app.get('/version', (req, res) => res.json({
   version: "1.0.0",
-  region: process.env.AWS_REGION || "local",
-  environment: process.env.ENVIRONMENT || "local"
+  region: region,
+  environment: env
 }))
+
+app.get('/users', async (req, res) => res.json(await userRepo.listAllUsers()))
 
 app.get('/users/1', (req, res) => res.json({
   name: "Caio Quirino",
@@ -32,9 +43,6 @@ app.get('/users/1', (req, res) => res.json({
 }))
 
 app.get('/health', (req, res) => res.sendStatus(200))
-
-
-
 
 const isInLambda = !!process.env.LAMBDA_TASK_ROOT;
 if (isInLambda) {
