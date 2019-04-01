@@ -17,8 +17,22 @@ variable "environment" {
   description = "Environment - dev, prod..."
 }
 
+variable "base_domain" {
+  description = "Base Domain"
+}
 
-variable "certificate_arn" {
+variable "latency_dns_hosts" {
+  type = "list"
+  description = "A list of all hosts which may have traffic routed to. Example: ['gift-codes-access-dev-eu-central-1.dazndev.com']"
+}
+
+variable "latency_dns_regions" {
+  type = "list"
+  description = "A list describing where each of the 'latency_dns_hosts' specified above are hosted. Example: ['eu-central-1']"
+}
+
+variable "certificate_arns" {
+  type = "map"
   description = "Domain certificate arn"
 }
 

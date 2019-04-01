@@ -1,39 +1,59 @@
 data "aws_route53_zone" "domain_zone" {
-  name         = "${local.base_domain}."
+  name         = "${var.base_domain}."
   private_zone = false
 }
 
-resource "aws_route53_zone" "env_zone" {
-  name         = "${var.environment}.${local.base_domain}"
+resource "aws_route53_health_check" "health" {
+  count = "${length(var.latency_dns_hosts)}"
+  fqdn = "${element(var.latency_dns_hosts, count.index)}"
+  type = "HTTPS"
+  port = "443"
+  resource_path = "/health"
+  failure_threshold = "5"
+  request_interval = "30"
+}
 
-  tags = {
-    environment = "${var.environment}"
+module "apigw_domain_us_east_1" {
+  providers = {
+    aws = "aws.us"
   }
+  source = "./regional_apigw"
+  base_domain = "${var.base_domain}"
+  api_gateway_name = "${var.api_gateway_name}"
+  certificate_arn = "${lookup(var.certificate_arns, "us-east-1")}"
+  environment = "${var.environment}"
+  zone_id = "${data.aws_route53_zone.domain_zone.id}"
+  region = "us-east-1"
 }
 
-resource "aws_api_gateway_domain_name" "apigw_domain" {
-  domain_name              = "${var.environment}.${local.base_domain}"
-  regional_certificate_arn = "${var.certificate_arn}"
 
-  endpoint_configuration {
-    types = ["REGIONAL"]
+module "apigw_domain_eu_central_1" {
+  providers = {
+    aws = "aws.eu"
   }
+  source = "./regional_apigw"
+  base_domain = "${var.base_domain}"
+  api_gateway_name = "${var.api_gateway_name}"
+  certificate_arn = "${lookup(var.certificate_arns, "eu-central-1")}"
+  environment = "${var.environment}"
+  zone_id = "${data.aws_route53_zone.domain_zone.id}"
+  region = "eu-central-1"
 }
 
-resource "aws_api_gateway_base_path_mapping" "api_gateway_dns_map" {
-  api_id      = "${data.aws_api_gateway_rest_api.api.id}"
-  stage_name  = "${var.environment}"
-  domain_name = "${aws_api_gateway_domain_name.apigw_domain.domain_name}"
-}
 
-resource "aws_route53_record" "api_record" {
-  name    = "${aws_api_gateway_domain_name.apigw_domain.domain_name}"
-  type    = "A"
-  zone_id = "${aws_route53_zone.env_zone.id}"
+resource "aws_route53_record" "balanced_record" {
+  name    = "dev.${var.base_domain}"
+  type    = "CNAME"
+  zone_id = "${data.aws_route53_zone.domain_zone.id}"
+  set_identifier = "${format("%s-%s", "serverless_demo", element(var.latency_dns_regions, count.index))}"
+  health_check_id = "${element(aws_route53_health_check.health.*.id, count.index)}"
+  ttl = 30
 
-  alias {
-    evaluate_target_health = true
-    name                   = "${aws_api_gateway_domain_name.apigw_domain.regional_domain_name}"
-    zone_id                = "${aws_api_gateway_domain_name.apigw_domain.regional_zone_id}"
+  records = [
+    "${element(var.latency_dns_hosts, count.index)}",
+  ]
+
+  latency_routing_policy {
+    region = "${element(var.latency_dns_regions, count.index)}"
   }
 }

@@ -44,19 +44,9 @@ resource "aws_api_gateway_deployment" "proxy_api" {
   }
 }
 
-resource "aws_api_gateway_method_settings" "proxy_settings" {
-  rest_api_id = "${aws_api_gateway_rest_api.api.id}"
-  stage_name  = "${aws_api_gateway_deployment.proxy_api.stage_name}"
-  method_path = "*/*"
-
-  settings {
-    logging_level = "${local.log_level}"
-  }
-}
-
 # IAM
 resource "aws_iam_role" "apigw_lambda_execution_role" {
-  name = "apigw_lambda_execution_${var.environment}"
+  name = "apigw_lambda_execution_${var.environment}_${var.region}"
 
   assume_role_policy = <<POLICY
 {
