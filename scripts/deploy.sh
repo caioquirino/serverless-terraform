@@ -26,6 +26,6 @@ deploy_service eu-central-1
 
 cd $BASEDIR/terraform/dns
 terraform init -backend-config=config/dev/config.remote
-terraform plan -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars -out plan.out
-terraform apply -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars -state plan.out -auto-approve
+terraform plan -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars
+terraform apply -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars -auto-approve
 rm plan.out
