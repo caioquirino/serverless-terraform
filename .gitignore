@@ -64,6 +64,7 @@ typings/
 .idea
 
 # Terraform
+terraform/global-table/.terraform
 terraform/service/.terraform
 terraform/service/.terraform_*
 terraform/service/plan.out
