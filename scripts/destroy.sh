@@ -4,11 +4,7 @@ set -e
 cd `dirname "$(realpath $0)"`/..
 BASEDIR=$PWD
 
-cd $BASEDIR/terraform/dns
-terraform destroy -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars -auto-approve
-
-cd $BASEDIR/terraform/global-table
-terraform destroy -var-file config/dev/config.remote -var-file config/dev/terraform.tfvars -auto-approve
+source commonvars.sh
 
 function destroy_service {
   cd $BASEDIR/terraform/service
