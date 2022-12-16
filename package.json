@@ -22,6 +22,6 @@
     "aws-sdk": "^2.1276.0",
     "aws-serverless-express": "^3.3.6",
     "bunyan": "^1.8.15",
-    "express": "^4.17.3"
+    "express": "^4.18.2"
   }
 }
