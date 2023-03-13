@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/caioquirino/serverless-terraform#readme",
   "dependencies": {
-    "aws-sdk": "^2.1276.0",
+    "aws-sdk": "^2.1333.0",
     "aws-serverless-express": "^3.4.0",
     "bunyan": "^1.8.15",
     "express": "^4.18.2"
